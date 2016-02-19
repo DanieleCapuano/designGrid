@@ -1,0 +1,34 @@
+/* here base variables are defined */
+////////////////////////////////////
+// FOR EACH max-width rule (default for no "@media screen" rules)
+//      designWidth: the width of the original design drawing
+//      designHeight: the width of the original design drawing
+//      ncols: the number of columns
+//      nrows: the number of rows
+//      colsWidths: a list with the columns widths in pixels measured from the design drawing
+//      rowsHeights: a list with the rows heights (baseline grid) in pixels measured from the design drawing
+//      colsGutters: a list with the widths of gutters between columns, in pixels, as measured from the design drawing, 0px for no gutter
+//      rowsGutters: a list with the heights of gutters between rows, in pixels, as measured from the design drawing, 0px for no gutter
+////////////////////////////////////
+$gridConfig: (
+    "default": (
+        "designWidth": 1052px,
+        "designHeight": 744px,
+        "ncols": 11,
+        "nrows": 10,
+        "colsWidths": (220px, 15px, 125px, 60px, 17px, 102px, 19px, 23px, 148px, 213px, 108px),
+        "rowsHeights": (226px, 43px, 133px, 27px, 27px, 27px, 27px, 94px, 49px, 87px),
+        "colsGutters": (0px, 8px, 0px, 0px, 0px, 0px, 0px, 0px, 0px, 0px, 0px),
+        "rowsGutters": (0px, 0px, 0px, 0px, 0px, 0px, 0px, 0px, 0px, 0px)
+    ),
+    "max-width:500px": (
+        "designWidth": 500px,
+        "designHeight": 744px,
+        "ncols": 2,
+        "nrows": 5,
+        "colsWidths": (250px, 250px),
+        "rowsHeights": (226px, 43px, 133px, 27px, 27px),
+        "colsGutters": (10px, 0px),
+        "rowsGutters": (0px, 0px, 0px, 0px, 0px)
+    )
+);

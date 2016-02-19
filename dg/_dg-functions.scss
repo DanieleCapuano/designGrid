@@ -1,0 +1,23 @@
+
+@function getPercentageValue($ref, $val, $oneHundredPerc:100%) {
+    @return ($val * $oneHundredPerc) / $ref;
+}
+
+@function sumList($arr, $from:1, $to:null) {
+    $sum: 0;
+    @if length($arr) == 0 {@return $sum;}
+    @if $to == null { $to: length($arr); }
+
+    @for $i from $from through $to {
+        $sum: $sum + nth($arr, $i);
+    }
+    @return $sum;
+}
+
+@function sumListPercentage($arr, $ref) {
+    $sum: 0%;
+    @each $n in $arr {
+        $sum: $sum + getPercentageValue($ref, $n);
+    }
+    @return $sum;
+}

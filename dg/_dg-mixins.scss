@@ -1,0 +1,160 @@
+@mixin generalColumnDef($gutter) {
+    position: relative;
+    float: left;
+    margin-right: $gutter;
+}
+@mixin getSingleColumnDef ($w, $gutter) {
+    @include generalColumnDef($gutter);
+    width: $w;
+}
+
+@mixin getWideColumnDef ($w, $gutter, $prevWidthSum) {
+    @include generalColumnDef($gutter);
+    width: $prevWidthSum + $w;
+}
+
+@mixin generalRowDef($gutter) {
+    margin-bottom: $gutter;
+}
+@mixin getSingleRowDef ($h, $gutter) {
+    @include generalRowDef($gutter);
+    height: $h;
+}
+@mixin getWideRowDef ($h, $gutter, $prevHeightSum) {
+    @include generalRowDef($gutter);
+    height: $prevHeightSum + $h;
+}
+
+@mixin gridModuleBasicRules {
+    .x-col-1 {
+        left: 0;
+    }
+    .y-row-1 {
+        top: 0;
+    }
+}
+
+
+//GRID MODULE RULES for both columns and rows
+@mixin gridModuleRules($i, $type, $outMeasure, $gutterMeasure, $upToHereSum) {
+    $nextId: $i + 1;
+
+    .dg-#{$type}-#{$i} {
+        @if $type == 'col' {
+            @include getSingleColumnDef($outMeasure, $gutterMeasure);
+        }
+        @else {
+            @include getSingleRowDef($outMeasure, $gutterMeasure);
+        }
+    }
+
+    //wide columns (each column has its width as widthsUpToHereSum + colWidth (width gutterWidth as margin))
+    .dg-extended-#{$type}-#{$i} {
+        @if $type == 'col' {
+            @include getWideColumnDef($outMeasure, $gutterMeasure, $upToHereSum);
+        }
+        @else {
+            @include getWideRowDef($outMeasure, $gutterMeasure, $upToHereSum);
+        }
+    }
+
+    @if $type == 'col' {
+        .dg-x-col-#{$nextId} {
+            left: $upToHereSum + $outMeasure + $gutterMeasure;
+        }
+        .dg-x-col-#{$i}-end {
+            left: $upToHereSum + $outMeasure;
+        }
+    }
+    @else {
+        .dg-y-row-#{$nextId} {
+            top: $upToHereSum + $outMeasure + $gutterMeasure;
+        }
+        .dg-y-row-#{$i}-end {
+            top: $upToHereSum + $outMeasure;
+        }
+    }
+}
+
+@mixin gridModuleRelationRules($type, $i, $j, $measure, $measureToPreviousEnd) {
+    .dg-ext-#{$type}-fromto-#{$i}-#{$j} {
+        @if $type == 'col' {
+            width: $measure;
+        }
+        @else {
+            height: $measure;
+        }
+    }
+
+    .dg-ext-#{$type}-fromto-#{$i}-#{$j - 1}-end {
+        @if $type == 'col' {
+            width: $measureToPreviousEnd;
+        }
+        @else {
+            height: $measureToPreviousEnd;
+        }
+    }
+}
+
+
+////////////////////////
+// CREATE ALL RULES FOR A SINGLE GRID SYSTEM
+////////////////////////
+@mixin gridSystemRules($config) {
+    $designWidth: map-get($config, "designWidth");
+    $designHeight: map-get($config, "designHeight");
+    $ncols: map-get($config, "ncols");
+    $nrows: map-get($config, "nrows");
+    $colsWidths: map-get($config, "colsWidths");
+    $rowsHeights: map-get($config, "rowsHeights");
+    $colsGutters: map-get($config, "colsGutters");
+    $rowsGutters: map-get($config, "rowsGutters");
+
+    // // COLUMNS
+    $computedColWidths: ();
+    $computedColWidthsNoGutters: ();
+    @for $i from 1 through length($colsWidths) {
+        $w: nth($colsWidths, $i);
+        $widthsUpToHereSum: sumList($computedColWidths);
+        $guttersSum: sumListPercentage($colsGutters, $designWidth);
+        $colWidth: getPercentageValue($designWidth, $w, 100% - $guttersSum);
+        $gutterWidth: getPercentageValue($designWidth, nth($colsGutters, $i));
+
+        @include gridModuleRules($i, 'col', $colWidth, $gutterWidth, $widthsUpToHereSum);
+
+        $computedColWidths: append($computedColWidths, $colWidth + $gutterWidth);
+        $computedColWidthsNoGutters: append($computedColWidths, $colWidth);
+    }
+
+    @include gridModuleBasicRules;
+
+    // // ROWS
+    $computedRowHeights: ();
+    $computedRowHeightsNoGutters: ();
+    @for $i from 1 through length($rowsHeights) {
+        $h: nth($rowsHeights, $i);
+        $heightsUpToHereSum: sumList($computedRowHeights);
+        $guttersSum: sumListPercentage($rowsGutters, $designHeight);
+        $rowHeight: getPercentageValue($designHeight, $h, 100% - $guttersSum);
+        $gutterHeight: getPercentageValue($designHeight, nth($rowsGutters, $i));
+
+        @include gridModuleRules($i, 'row', $rowHeight, $gutterHeight, $heightsUpToHereSum);
+
+        $computedRowHeights: append($computedRowHeights, $rowHeight + $gutterHeight);
+        $computedRowHeightsNoGutters: append($computedRowHeights, $rowHeight);
+    }
+
+    // // RELATIONS
+    @for $i from 1 to length($computedColWidths) {
+        @for $j from 1 to length($computedColWidths) {
+            $sumcw: sumList($computedColWidths, $i, $j);
+            @include gridModuleRelationRules('col', $i, $j+1, $sumcw, $sumcw - getPercentageValue($designWidth, nth($colsGutters, $j)));
+        }
+    }
+    @for $i from 1 to length($computedRowHeights) {
+        @for $j from 1 to length($computedRowHeights) {
+            $sumrh: sumList($computedRowHeights, $i, $j);
+            @include gridModuleRelationRules('row', $i, $j+1, $sumrh, $sumrh - getPercentageValue($designHeight, nth($rowsGutters, $j)));
+        }
+    }
+}
