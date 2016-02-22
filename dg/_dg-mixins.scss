@@ -103,6 +103,7 @@
 @mixin gridSystemRules($config) {
     $designWidth: map-get($config, "designWidth");
     $designHeight: map-get($config, "designHeight");
+
     $ncols: map-get($config, "ncols");
     $nrows: map-get($config, "nrows");
     $colsWidths: map-get($config, "colsWidths");
@@ -145,15 +146,19 @@
     }
 
     // // RELATIONS
-    @for $i from 1 to length($computedColWidths) {
-        @for $j from 1 to length($computedColWidths) {
+    @for $i from 1 through length($computedColWidths) {
+        @for $j from 1 through length($computedColWidths) {
             $sumcw: sumList($computedColWidths, $i, $j);
             @include gridModuleRelationRules('col', $i, $j+1, $sumcw, $sumcw - getPercentageValue($designWidth, nth($colsGutters, $j)));
         }
     }
-    @for $i from 1 to length($computedRowHeights) {
-        @for $j from 1 to length($computedRowHeights) {
+
+    @for $i from 1 through length($computedRowHeights) {
+        @for $j from 1 through length($computedRowHeights) {
             $sumrh: sumList($computedRowHeights, $i, $j);
+            @if ($i == 14 and $j == 14) {
+                @debug "FINE!";
+            }
             @include gridModuleRelationRules('row', $i, $j+1, $sumrh, $sumrh - getPercentageValue($designHeight, nth($rowsGutters, $j)));
         }
     }
