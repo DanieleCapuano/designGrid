@@ -60,3 +60,10 @@ The following css classes are created by DesignGrid:
 * *< prefix >*-ext-[col|row]-fromto-*< index1 >*-*< index2 >*-end, where *prefix* is either *dg* for the default ruleset or *dg-* + "anything you specified as *prefix* in the configuration file" (see above); *index1* is the starting point and *index2* is the end point. This rule gives an element which goes from the element at *index1* to the end point of the element at *index2*
 
         Example: .dg-ext-col-fromto-2-5-end
+
+
+
+-------------------------------
+
+###*Current developments*
+* managing the possible appear/disappear of columns/rows as the max-width varies.
