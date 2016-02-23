@@ -55,11 +55,11 @@
 //respect the specific responsive max-width configuration (see the dg-config partial)
 @each $maxWidth in map-keys($gridConfig) {
     @if ($maxWidth == "default") {
-        @include gridSystemRules(map-get($gridConfig, $maxWidth));
+        @include gridSystemRules(map-get($gridConfig, $maxWidth), $maxWidth);
     }
     @else {
         @media screen and (#{$maxWidth}) {
-            @include gridSystemRules(map-get($gridConfig, $maxWidth));
+            @include gridSystemRules(map-get($gridConfig, $maxWidth), $maxWidth);
         }
     }
 }

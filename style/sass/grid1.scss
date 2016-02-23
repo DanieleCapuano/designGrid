@@ -1,0 +1,21 @@
+/*
+  main layout style
+*/
+@import "dg/designGrid";    //this includes "compass"
+
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* grid-specific overwrites */
+
+.dg-grid-debug {
+    @include background-image(linear-gradient(to bottom right, #5a5758, #a39b9b));
+
+    & * {
+        @include transition(all 0.5s linear);
+    }
+}
