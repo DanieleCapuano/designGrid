@@ -1,7 +1,7 @@
-#DesignGrid
+# DesignGrid
 Given the description of a design (e.g. made in photoshop, illustrator or whatever), made of reference width/height, and a list of pixel values describing where to place columns and rows, DesignGrid generates a css file with this grid system and several helper css classes.
 
-#Reasons
+## Reasons
 *"Why another css grid system generator? I can use Bootstrap!"*.
 Yes of course. Actually most of the time you should...But...
 
@@ -16,12 +16,12 @@ Design grid is based on Sass and Compass. [Here](http://thesassway.com/beginner/
 
 After you have Sass and Compass installed and configured, you can start configuring you grid system.
 
-#Configuration
+## Configuration
 DesignGrid uses the Sass partial called *_dg-config.scss*. Here a $gridConfig variable is stored, which is a map where each key is a *max-width* directive to be used in a *@media screen* rule, except for the *default* key which represents the grid configuration to use as default.
 
 The current configuration file contains an example of a possible grid, where a single default and a @media rule is given (for *max-width:500px*).
 
-##Configuration reference
+## Configuration reference
 For each max-width rule (*default* is used for no "@media screen" rules) the following keys are available:
 * prefix: a string representing the prefix which will be given to the current ruleset. If you use "foo" as the prefix for the *@media screen and (max-width: 500px)* ruleset, you will get rules such as *.dg-foo-col-x-1*
 * designWidth: the width of the original design drawing
@@ -33,7 +33,7 @@ For each max-width rule (*default* is used for no "@media screen" rules) the fol
 * colsGutters: a list with the widths of gutters between columns, in pixels, as measured from the design drawing, 0px for no gutter
 * rowsGutters: a list with the heights of gutters between rows, in pixels, as measured from the design drawing, 0px for no gutter
 
-#Using DesignGrid
+## Using DesignGrid
 After you filled the configuration, you can start programming using the grid. The *index.html* and *sass/grid1.scss* files give a possible example of a page which simply displays the grid.
 
 The following css classes are created by DesignGrid:
@@ -65,5 +65,5 @@ The following css classes are created by DesignGrid:
 
 -------------------------------
 
-###*Current developments*
+### *Current developments*
 * managing the possible appear/disappear of columns/rows as the max-width varies.
